@@ -93,7 +93,7 @@ class Clock:
         session = session/3600
 
         self.start_time = 0
-        print 'Session: %3.2f hour%s\nLifetime: %3.2f %s' % (session, pluralize(session), total, pluralize('hour', total))
+        print 'Session: %3.2f %s\nLifetime: %3.2f %s' % (session, pluralize('hour', session), total, pluralize('hour', total))
       else:
         print 'Timer hasn\'t been started!'
     else:
