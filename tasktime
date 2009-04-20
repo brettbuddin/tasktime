@@ -2,7 +2,7 @@
 
 # Author: Brett Buddin
 # Name: tasktime
-# Description: Simple command line utility for keeping track time for your tasks.
+# Description: Simple command line utility for time tracking.
 
 import re, time
 
