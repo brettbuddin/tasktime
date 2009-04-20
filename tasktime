@@ -1,0 +1,129 @@
+#!/usr/bin/python
+
+# Author: Brett Buddin
+# Name: tasktime
+# Description: Simple command line utility for keeping track time for your tasks.
+
+import re, time
+
+def execute(command, clock):
+
+  if command == 'exit':
+    clock.report()
+    return False
+  elif command == 'start':
+    clock.start()
+  elif command == 'stop':
+    clock.stop()
+  elif command == 'status':
+    clock.status()
+  elif command == 'report':
+    clock.report()
+  elif command == 'using':
+    clock.using()
+  else:
+    pattern = re.compile('(create|delete|use) ([a-zA-Z0-9+\\/"\'_ -]+)')
+    matches = pattern.findall(command)
+
+    if len(matches) > 0:
+      if matches[0][0] == 'create':
+        clock.create_task(matches[0][1])
+      elif matches[0][0] == 'delete':
+        clock.delete_task(matches[0][1])
+      elif matches[0][0] == 'use':
+        clock.select_task(matches[0][1])
+      else:
+        print 'Invalid command!'
+    else:
+      print 'Invalid command!'
+
+  return True
+
+def pluralize(str, num):
+  return  '%ss' % (str) if (num != 1) else str
+
+class Clock:
+
+  def __init__(self):
+    self.tasks = {}
+    self.active_task = ''
+    self.start_time = 0.0
+
+	
+  def create_task(self, name):
+    if name not in self.tasks:
+      self.tasks[name] = 0
+    else:
+      print 'Task already exists!'
+
+  def delete_task(self, name):
+    if name in self.tasks:
+      del(self.tasks[name])
+  
+      if self.active_task == name:
+        self.active_task = ''
+    else:
+      print 'No such task!'
+
+  def select_task(self, name):
+    if name in self.tasks:
+      if self.start_time > 0:
+        self.stop()
+      self.active_task = name
+    else:
+      print 'No such task!'
+
+  def start(self):
+    if self.active_task:
+      self.start_time = time.time()
+    else:
+      print 'No task has been chosen!'
+
+  def stop(self):
+    if self.active_task:
+      if self.start_time > 0:
+        session = time.time() - self.start_time
+        self.tasks[self.active_task] += session
+        
+        total = self.tasks[self.active_task]/3600
+        session = session/3600
+
+        self.start_time = 0
+        print 'Session: %3.2f hour%s\nLifetime: %3.2f %s' % (session, pluralize(session), total, pluralize('hour', total))
+      else:
+        print 'Timer hasn\'t been started!'
+    else:
+      print 'No task is selected!'
+
+
+  def using(self):
+    if self.active_task:
+      print 'Using "%s".' % self.active_task
+    else:
+      print 'No active task!'
+
+  def status(self):	
+    if self.start_time > 0:
+      hours = (time.time() - self.start_time) / 3600
+      print 'Timer started with %3.2f %s.' % (hours, pluralize('hour', hours))
+    else:
+      print 'Timer stopped.'
+      
+  def report(self):
+    for task in self.tasks:
+      if task == self.active_task and self.start_time > 0:
+        hours = (self.tasks[task] + (time.time() - self.start_time)) / 3600
+      else:
+        hours = self.tasks[task] / 3600
+		
+      print "%s: %3.2f %s" % (task, hours, pluralize('hour', hours))
+
+
+if __name__ == '__main__':
+	
+  clock = Clock();
+  loop = True
+
+  while loop:
+    command = raw_input(">> ")
+    loop = execute(command, clock)
