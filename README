@@ -1,0 +1,44 @@
+Task Management
+=======================
+
+create <task_name>
+  Creates a new task
+
+delete <task_name>
+  Deletes a task
+
+use <task_name>
+  Switches active task to the one specified
+
+using
+  Reports the name of the current active task
+
+
+The Clock
+=======================
+
+start
+  Starts the clock for the active task
+
+stop
+  Stops the clock for the active task
+
+switch
+  Stops the clock (if a task is selected and the clock is running) and switches the active task to another task
+
+
+Reporting
+=======================
+
+status
+  Reports the current time elapsed for the active task
+
+report
+  Reports hours for all tasks
+
+
+Other
+=======================
+
+exit
+  Quits the program
