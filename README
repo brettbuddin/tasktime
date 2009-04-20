@@ -8,7 +8,7 @@ delete <task_name>
   Deletes a task
 
 use <task_name>
-  Switches active task to the one specified
+  Switches active task to the one specified. Stops the clock of the current active task if it has been started.
 
 using
   Reports the name of the current active task
@@ -22,9 +22,6 @@ start
 
 stop
   Stops the clock for the active task
-
-switch
-  Stops the clock (if a task is selected and the clock is running) and switches the active task to another task
 
 
 Reporting
